@@ -109,6 +109,32 @@
     orientationInfo += 'Gamma: ' + event.gamma.toFixed(2);
     document.getElementById('orientationInfo').textContent = orientationInfo;
 });
+window.onload = function() {
+    if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            document.getElementById('locationInfo').textContent = 'Lokasi Anda: ' + latitude + ', ' + longitude;
+        }, function(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    document.getElementById('locationInfo').textContent = 'Izin untuk mendapatkan lokasi ditolak oleh pengguna.';
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    document.getElementById('locationInfo').textContent = 'Informasi lokasi tidak tersedia.';
+                    break;
+                case error.TIMEOUT:
+                    document.getElementById('locationInfo').textContent = 'Waktu permintaan lokasi habis.';
+                    break;
+                case error.UNKNOWN_ERROR:
+                    document.getElementById('locationInfo').textContent = 'Terjadi kesalahan yang tidak diketahui.';
+                    break;
+            }
+        });
+    } else {
+        document.getElementById('locationInfo').textContent = 'Geolocation tidak didukung di browser ini.';
+    }
+}
 </script>
 <style>
 body {
@@ -129,7 +155,8 @@ p {
 #deviceInfo,
 #adBlockInfo,
 #batteryInfo,
-#orientationInfo {
+#orientationInfo,
+#locationInfo {
     margin-bottom: 10px;
     padding: 10px;
     background-color: #f0f0f0;
@@ -157,5 +184,6 @@ p {
     <div id="adBlockInfo"></div>
     <div id="batteryInfo"></div>
     <div id="orientationInfo"></div>
+    <div id="locationInfo"></div>
 </body>
 </html>
