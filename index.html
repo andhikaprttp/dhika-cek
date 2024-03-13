@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dhika cek</title>
+<script>
+    window.onload = function() {
+        if ('getBattery' in navigator) {
+            navigator.getBattery().then(function(battery) {
+                updateBatteryInfo(battery);
+                battery.addEventListener('levelchange', function() {
+                    updateBatteryInfo(battery);
+                });
+            });
+        } else {
+            document.getElementById('batteryInfo').textContent = 'Informasi baterai tidak didukung di browser ini.';
+        }
+        document.getElementById('browserInfo').textContent = 'Browser Anda: ' + detectBrowser();
+        document.getElementById('deviceInfo').textContent = detectDeviceInfo();
+        document.getElementById('adBlockInfo').textContent = 'AdBlock: ' + detectAdBlock();
+    }
+    function detectBrowser() {
+        var userAgent = navigator.userAgent.toLowerCase();
+        if(userAgent.indexOf('firefox') !== -1) {
+            return 'Mozilla Firefox';
+        } else if(userAgent.indexOf('chrome') !== -1) {
+            return 'Google Chrome';
+        } else if(userAgent.indexOf('safari') !== -1) {
+            return 'Apple Safari';
+        } else if(userAgent.indexOf('opera') !== -1 || userAgent.indexOf('opr') !== -1) {
+            return 'Opera';
+        } else if(userAgent.indexOf('edge') !== -1) {
+            return 'Microsoft Edge';
+        } else if(userAgent.indexOf('msie') !== -1 || userAgent.indexOf('trident') !== -1) {
+            return 'Internet Explorer';
+        } else {
+            return 'Browser tidak terdeteksi';
+        }
+    }
+    function detectDeviceInfo() {
+        var deviceInfo = 'Informasi Perangkat: ';
+        deviceInfo += 'Browser: ' + detectBrowser() + ', ';
+        deviceInfo += 'Platform: ' + navigator.platform + ', ';
+        deviceInfo += 'Vendor: ' + navigator.vendor + ', ';
+        deviceInfo += 'Bahasa: ' + navigator.language + ', ';
+        deviceInfo += 'Tipe: ' + detectDeviceType() + ', ';
+        deviceInfo += 'Model: ' + detectDeviceModel() + ', ';
+        deviceInfo += 'Tipe Jaringan: ' + detectNetworkType();
+        return deviceInfo;
+    }
+
+    // Mendeteksi tipe perangkat
+    function detectDeviceType() {
+        if(/android/i.test(navigator.userAgent)) {
+            return 'Smartphone';
+        } else if(/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+            return 'iOS Device';
+        } else if(/windows phone/i.test(navigator.userAgent)) {
+            return 'Windows Phone';
+        } else if(/windows/i.test(navigator.userAgent)) {
+            return 'Desktop/Laptop (Windows)';
+        } else if(/macintosh|mac os/i.test(navigator.userAgent)) {
+            return 'Desktop/Laptop (Mac)';
+        } else if(/linux/i.test(navigator.userAgent)) {
+            return 'Desktop/Laptop (Linux)';
+        } else {
+            return 'Tidak Diketahui';
+        }
+    }
+    function detectDeviceModel() {
+        return 'Tidak Diketahui';
+    }
+    function detectNetworkType() {
+        if(navigator.connection) {
+            if(navigator.connection.type === 'wifi') {
+                return 'Wi-Fi';
+            } else if(navigator.connection.type === 'cellular') {
+                return 'Data Seluler';
+            } else if(navigator.connection.type === 'ethernet') {
+                return 'Ethernet';
+            } else if(navigator.connection.type === 'bluetooth') {
+                return 'Bluetooth';
+            } else {
+                return 'Tidak Diketahui';
+            }
+        } else {
+            return 'Tidak Diketahui';
+        }
+    }
+    function detectAdBlock() {
+        if(typeof blockAdBlock === 'undefined') {
+            return 'Tidak aktif';
+        } else {
+            return 'Aktif';
+        }
+    }
+
+    function updateBatteryInfo(battery) {
+        var batteryInfo = 'Status Baterai: ';
+        batteryInfo += (battery.charging ? 'Sedang diisi daya' : 'Tidak diisi daya') + ', ';
+        batteryInfo += 'Level: ' + (battery.level * 100).toFixed(2) + '%';
+        document.getElementById('batteryInfo').textContent = batteryInfo;
+    }
+    window.addEventListener('deviceorientation', function(event) {
+    var orientationInfo = 'Informasi Orientasi: ';
+    orientationInfo += 'Alpha: ' + event.alpha.toFixed(2) + ', ';
+    orientationInfo += 'Beta: ' + event.beta.toFixed(2) + ', ';
+    orientationInfo += 'Gamma: ' + event.gamma.toFixed(2);
+    document.getElementById('orientationInfo').textContent = orientationInfo;
+});
+</script>
+</head>
+<body>
+  <h1>Dhika cek</h1>
+  <p>Ini adalah pengecekan ndra</p>
+  <p>dibuat oleh : <a href="andhikapratamap.hashnode.dev">dhika</a></p>
+    <h1>Informasi Perangkat Pengguna</h1>
+    <div id="browserInfo"></div>
+    <div id="deviceInfo"></div>
+    <div id="adBlockInfo"></div>
+    <div id="batteryInfo"></div>
+    <div id="orientationInfo"></div>
+</body>
+</html>
