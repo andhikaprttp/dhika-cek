@@ -109,6 +109,7 @@
     orientationInfo += 'Gamma: ' + event.gamma.toFixed(2);
     document.getElementById('orientationInfo').textContent = orientationInfo;
 });
+
 window.onload = function() {
     if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition(function(position) {
